@@ -1,0 +1,27 @@
+# Scrip created by Felix Agudo
+# In this YAML Script we'll define the steps which should be follow by de pipeline
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+# Copy files
+# Copy the pbix file from Dataset folder to a STG folder of DevOps
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: 'Dataset'
+    contents: '*.pbix'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
+    overWrite: true
+
+# Publish build artifacts
+# Publish the artifact built to Azure Pipelines
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop' 
